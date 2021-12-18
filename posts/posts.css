@@ -1,0 +1,38 @@
+body {
+    margin: 40px auto;
+    max-width: 800px;
+    font: 18px/1.5 sans-serif;
+    padding: 0 10px;
+    background-color: #0D1117;
+    color: #C9D1D9;;
+}
+
+.section {
+    text-align: center;
+    font-weight: bold;
+}
+
+h1, h2, h3 {
+    line-height: 1.2;
+    text-align: center;
+    font-family: monospace
+}
+
+pre {
+    border: 2px solid grey;
+    padding: 1em;
+}
+
+
+code {
+    font: 16px/1.2 monospace;
+    background-color: #eee;
+    padding: 2px 4px;
+    white-space: nowrap;
+}
+
+pre > code {
+    padding: 0;
+    white-space: pre;
+}
+
