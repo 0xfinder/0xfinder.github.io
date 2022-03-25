@@ -1,5 +1,5 @@
 {
-    "componentChunkName": "component---src-pages-index-js",
+    "componentChunkName": "component---src-pages-index-jsx",
     "path": "/",
-    "result": {"data":{"site":{"siteMetadata":{"title":"Finder"}},"allMdx":{"nodes":[{"excerpt":"A cold, serene night It’s 0219 and I’m about to pass the latest I’ve ever slept which is 0230 and I honestly have no idea what I’m doing. My…","fields":{"slug":"/the-bane-of-my-existence/"},"frontmatter":{"date":"March 22, 2022","title":"The bane of my existence","description":"studying, education, promises and the path you were made to follow"}}]}},"pageContext":{}},
-    "staticQueryHashes": ["2513378701","2841359383","3257411868"]}
+    "result": {"data":{"site":{"siteMetadata":{"title":"Finder"}},"allMdx":{"nodes":[{"excerpt":"A cold, serene night It’s 0219 and I’m about to pass the latest I’ve ever slept which is 0230 and I honestly have no idea what I’m doing. My…","fields":{"slug":"/the-bane-of-my-existence/"},"frontmatter":{"date":"March 22, 2022","title":"The bane of my existence","description":"Studying, education, promises and the path you were made to follow"},"timeToRead":8,"id":"5a7f1478-7baa-5035-a35d-3d6a3d53bff6"}]}},"pageContext":{}},
+    "staticQueryHashes": ["1342816762","2841359383"]}
