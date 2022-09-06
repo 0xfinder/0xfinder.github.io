@@ -1,7 +1,0 @@
-{
-  "main.js": "render-page.js",
-  "render-page.js.map": "render-page.js.map",
-  "static/go.png": "static/go-86fe349a49f66d92bb06a72c5d9e8d6d.png",
-  "static/python.png": "static/python-f22d1fce7c62d8e9fe76fb2216fffd10.png",
-  "static/rust.png": "static/rust-62ef37773a220d28aaa3a5f92beea17e.png"
-}
