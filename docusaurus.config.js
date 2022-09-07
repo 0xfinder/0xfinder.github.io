@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/vsDark');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'finder',
-  tagline: 'Repository of knowledge',
+  tagline: 'im unemployed',
   url: 'https://0xfinder.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
