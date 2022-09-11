@@ -38,13 +38,13 @@ const config = {
             ({
                 docs: {
                     sidebarPath: require.resolve("./sidebars.js"),
-                    editUrl: "https://github.com/0xfinder/garden",
+                    editUrl: "https://github.com/0xfinder/0xfinder.github.io",
                     remarkPlugins: [math],
                     rehypePlugins: [katex],
                 },
                 blog: {
                     showReadingTime: true,
-                    editUrl: "https://github.com/0xfinder/garden",
+                    editUrl: "https://github.com/0xfinder/0xfinder.github.io",
                 },
                 theme: {
                     customCss: require.resolve("./src/css/custom.css"),
