@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "math/discrete math/discrete math.md",
+            "file": "anime/anime.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "math/discrete math/discrete math.md",
+                "file": "anime/anime.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -89,15 +89,15 @@
   },
   "active": "9116ea6136282fc1",
   "lastOpenFiles": [
-    "math/math.md",
+    "crypto/cryptocurrencies/cryptocurrencies.md",
     "crypto/mev/mev.md",
+    "crypto/blockchain/blockchain.md",
+    "math/math.md",
+    "math/discrete math/discrete math.md",
     "math/mit6_042js15_textbook.pdf",
     "intro.md",
     "unix/unix.md",
     "unix/dotfiles.md",
-    "text-editors/neovim/neovim.md",
-    "crypto/blockchain/blockchain.md",
-    "programming-languages/rust/rust.md",
-    "text-editors/text-editors.md"
+    "text-editors/neovim/neovim.md"
   ]
 }
