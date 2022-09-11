@@ -14,4 +14,5 @@ title: Discrete Math
 
 Proof: A _mathematical proof_ of a _proposition_ is a chain of logical deductions leading to the proposition from a base set of _axioms_.
 
-Let $f\colon[a,b]\to\R$ be Riemann integrable. Let $F\colon[a,b]\to\R$ be $F(x)=\int_{a}^{x} f(t)\,dt$. Then $F$ is continuous, and at all $x$ such that  $f$ is continuous at $x$, $F$ is differentiable at $x$ with $F'(x)=f(x)$.
+#### Inferences
+*modus ponens*: a proof of P + proof that P implies Q is a proof of Q

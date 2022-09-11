@@ -1,3 +1,5 @@
+# Blockchain
+
 ### [What is a blockchain?](https://www.coinbase.com/learn/crypto-basics/what-is-a-blockchain)
 
 - list of transactions that anyone can view and verify (distributed & immutable ledger)

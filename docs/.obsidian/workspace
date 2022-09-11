@@ -89,15 +89,15 @@
   },
   "active": "9116ea6136282fc1",
   "lastOpenFiles": [
-    "intro.md",
     "math/math.md",
-    "math/discrete math/discrete math.md",
-    "math/mit6_042js15_textbook.pdf",
     "crypto/mev/mev.md",
+    "math/mit6_042js15_textbook.pdf",
+    "intro.md",
+    "unix/unix.md",
+    "unix/dotfiles.md",
+    "text-editors/neovim/neovim.md",
+    "crypto/blockchain/blockchain.md",
     "programming-languages/rust/rust.md",
-    "games/games.md",
-    "games/epic-seven/epic-seven.md",
-    "crypto/mev/MEV101.pdf",
-    "crypto/mev/one.md"
+    "text-editors/text-editors.md"
   ]
 }
