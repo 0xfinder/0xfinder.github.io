@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkgarden=self.webpackChunkgarden||[]).push([[962],{3933:a=>{a.exports=JSON.parse('{"label":"rant","permalink":"/blog/tags/rant","allTagsPath":"/blog/tags","count":1}')}}]);
