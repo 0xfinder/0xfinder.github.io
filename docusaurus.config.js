@@ -87,7 +87,7 @@ const config = {
                         "aria-label": "Twitter",
                     },
                     {
-                        href: "https://github.com/0xfinder/garden",
+                        href: "https://github.com/0xfinder",
                         position: "right",
                         className: "header-github-link",
                         "aria-label": "GitHub Repository",
