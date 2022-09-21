@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkgarden=self.webpackChunkgarden||[]).push([[3630],{9552:e=>{e.exports=JSON.parse('{"permalink":"/blog/tags/rant","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);
