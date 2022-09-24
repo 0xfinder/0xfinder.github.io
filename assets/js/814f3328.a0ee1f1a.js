@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkgarden=self.webpackChunkgarden||[]).push([[2535],{5641:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"The Bane Of My Existence","permalink":"/blog/the-bane-of-my-existence"}]}')}}]);
