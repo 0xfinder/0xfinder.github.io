@@ -4,6 +4,7 @@ currently being forced to do excel for 2 years so why not pick up vba while im a
 
 ## Notes
 
+- Reduce runtime errors with  ```Option Explicit``` (requires you to declare variables before using them)
 
 ## Links
 
