@@ -37,7 +37,7 @@ for (const link of internalLinks) {
     if (el) {
       e.preventDefault();
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (navList?.classList.contains('open')) navList.classList.remove('open');
+      navList?.classList.remove('open');
     }
   });
 }
