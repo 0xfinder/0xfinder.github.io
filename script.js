@@ -29,7 +29,7 @@ if (themeToggle) {
 
 // Smooth scroll for in-page links
 const internalLinks = document.querySelectorAll('a[href^="#"]');
-internalLinks.forEach(link => {
+for (const link of internalLinks) {
   link.addEventListener('click', e => {
     const targetId = link.getAttribute('href');
     if (!targetId || targetId === '#') return;
@@ -37,26 +37,26 @@ internalLinks.forEach(link => {
     if (el) {
       e.preventDefault();
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (navList && navList.classList.contains('open')) navList.classList.remove('open');
+      if (navList?.classList.contains('open')) navList.classList.remove('open');
     }
   });
-});
+}
 
 // Reveal on scroll
 const revealEls = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
+  for (const entry of entries) {
     if (entry.isIntersecting) {
       entry.target.classList.add('in');
       observer.unobserve(entry.target);
     }
-  });
+  }
 }, { threshold: 0.1 });
-revealEls.forEach(el => observer.observe(el));
+for (const el of revealEls) observer.observe(el);
 
 // Stat counters
 const statNums = document.querySelectorAll('.stat .num');
-statNums.forEach(numEl => {
+for (const numEl of statNums) {
   const target = Number(numEl.dataset.target || '0');
   const durationMs = 1200;
   let startTs = 0;
@@ -68,7 +68,7 @@ statNums.forEach(numEl => {
     if (progress < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
-});
+}
 
 // Modal / Lightbox helpers
 const modal = document.getElementById('modal');
@@ -101,7 +101,7 @@ if (modal) {
 
 // Albums -> open embed in modal
 const albumCards = document.querySelectorAll('.album-card');
-albumCards.forEach(card => {
+for (const card of albumCards) {
   card.addEventListener('click', () => {
     try {
       const data = JSON.parse(card.getAttribute('data-album') || '{}');
@@ -118,11 +118,11 @@ albumCards.forEach(card => {
       console.error('Invalid album data', err);
     }
   });
-});
+}
 
 // Gallery lightbox
 const galleryItems = document.querySelectorAll('.gallery-item');
-galleryItems.forEach(item => {
+for (const item of galleryItems) {
   item.addEventListener('click', () => {
     const src = item.getAttribute('data-src');
     if (!src) return;
@@ -132,7 +132,7 @@ galleryItems.forEach(item => {
       </div>
     `);
   });
-});
+}
 
 // Newsletter form
 const form = document.getElementById('newsletterForm');
@@ -156,7 +156,7 @@ if (form) {
       localStorage.setItem('bh_subscribers', JSON.stringify(existing));
     }
     form.reset();
-    if (formMsg) formMsg.textContent = `Thanks${name ? ', ' + name : ''}! You are subscribed.`;
+    if (formMsg) formMsg.textContent = `Thanks${name ? `, ${name}` : ''}! You are subscribed.`;
   });
 }
 
