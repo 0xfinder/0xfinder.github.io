@@ -126,12 +126,13 @@ button, input { font-family: inherit; }
 @media (max-width: 700px) { .albums { grid-template-columns: repeat(2, 1fr); } }
 .album-card { cursor: pointer; background: var(--surface); border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); overflow: hidden; transition: transform .2s ease, box-shadow .2s ease; }
 .album-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-.cover { aspect-ratio: 1 / 1; display: grid; place-items: center; font-weight: 700; letter-spacing: 0.8px; font-size: 2rem; color: white; }
-.cover-a { background: linear-gradient(135deg, #7c4dff, #ff4dd8); }
-.cover-b { background: linear-gradient(135deg, #00e5ff, #7c4dff); }
-.cover-c { background: linear-gradient(135deg, #ff4dd8, #ff8a00); }
-.cover-d { background: linear-gradient(135deg, #00e676, #00e5ff); }
-.cover-e { background: linear-gradient(135deg, #ffd54f, #ff4dd8); }
+.cover { 
+  aspect-ratio: 1 / 1; 
+  width: 100%; 
+  height: auto; 
+  object-fit: cover; 
+  border-radius: 8px;
+}
 .album-info { padding: 12px; display: flex; align-items: baseline; justify-content: space-between; }
 .album-info h3 { margin: 0; font-size: 1rem; }
 .album-info span { color: var(--muted); font-size: 0.9rem; }
