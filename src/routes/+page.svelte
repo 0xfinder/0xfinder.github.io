@@ -1,32 +1,30 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	
-	let visible = $state(false);
-	
-	onMount(() => {
-		visible = true;
-	});
+import { onMount } from "svelte";
+
+let visible = $state(false);
+
+onMount(() => {
+	visible = true;
+});
 </script>
 
 <div class="about" class:visible>
 	<div class="intro">
 		<p class="greeting">Hey, I'm</p>
 		<h1 class="name">
-			<span class="accent">0x</span>finder<span class="cursor"></span>
+			finder<span class="cursor"></span>
 		</h1>
 	</div>
 	
 	<div class="bio">
 		<p>
-			A passionate developer who loves building things that live on the internet. 
-			I enjoy exploring new technologies, solving complex problems, and creating 
-			elegant solutions.
+			i like writing code and working with AI
 		</p>
 		
 		<p>
-			Currently interested in <span class="tag">web development</span>, 
+			i'm currently interested in <span class="tag">web development</span>, 
 			<span class="tag">systems programming</span>, and 
-			<span class="tag">open source</span>.
+			<span class="tag">blockchains</span>.
 		</p>
 	</div>
 	

@@ -1,56 +1,56 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+import { onMount } from "svelte";
 
-	let { data } = $props();
-	let visible = $state(false);
-	let headings = $state<{ id: string; text: string; level: number }[]>([]);
-	let activeId = $state('');
+const { data } = $props();
+let visible = $state(false);
+let headings = $state<{ id: string; text: string; level: number }[]>([]);
+let activeId = $state("");
 
-	onMount(() => {
-		visible = true;
+onMount(() => {
+	visible = true;
 
-		// Extract headings from the rendered content
-		const article = document.querySelector('.content');
-		if (article) {
-			const h2s = article.querySelectorAll('h2');
-			headings = Array.from(h2s).map((h, i) => {
-				const id = h.id || `heading-${i}`;
-				h.id = id;
-				return { id, text: h.textContent || '', level: 2 };
-			});
-
-			// Set up intersection observer for scroll spy
-			const observer = new IntersectionObserver(
-				(entries) => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							activeId = entry.target.id;
-						}
-					});
-				},
-				{ rootMargin: '-80px 0px -80% 0px' }
-			);
-
-			h2s.forEach((h) => observer.observe(h));
-
-			return () => observer.disconnect();
-		}
-	});
-
-	function formatDate(dateStr: string) {
-		return new Date(dateStr).toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
+	// Extract headings from the rendered content
+	const article = document.querySelector(".content");
+	if (article) {
+		const h2s = article.querySelectorAll("h2");
+		headings = Array.from(h2s).map((h, i) => {
+			const id = h.id || `heading-${i}`;
+			h.id = id;
+			return { id, text: h.textContent || "", level: 2 };
 		});
-	}
 
-	function scrollToHeading(id: string) {
-		const el = document.getElementById(id);
-		if (el) {
-			el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-		}
+		// Set up intersection observer for scroll spy
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						activeId = entry.target.id;
+					}
+				});
+			},
+			{ rootMargin: "-80px 0px -80% 0px" },
+		);
+
+		h2s.forEach((h) => observer.observe(h));
+
+		return () => observer.disconnect();
 	}
+});
+
+function formatDate(dateStr: string) {
+	return new Date(dateStr).toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+}
+
+function scrollToHeading(id: string) {
+	const el = document.getElementById(id);
+	if (el) {
+		el.scrollIntoView({ behavior: "smooth", block: "start" });
+	}
+}
 </script>
 
 <svelte:head>
@@ -85,10 +85,10 @@
 				<span class="read-time">{data.readTime} min read</span>
 			</div>
 			<div class="author">
-				<img src="/avatar.png" alt="0xfinder" class="avatar" />
+				<img src="https://github.com/0xfinder.png" alt="0xfinder" class="avatar" />
 				<div class="author-info">
-					<span class="author-name">0xfinder</span>
-					<span class="author-title">Developer</span>
+					<span class="author-name">finder</span>
+					<span class="author-title">degenerate</span>
 				</div>
 			</div>
 		</header>

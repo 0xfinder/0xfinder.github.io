@@ -1,28 +1,11 @@
 ---
-title: Hello World
-description: My first blog post
+title: hello world
+description: my "first" blog post
 date: 2026-01-28
 ---
 
-This is my first blog post. Welcome to my blog!
+not really my first post since i restored my other single post from my old blog/website but this is a fresh start.
 
-## Getting Started
+i don't really know if i'll write much but i'll see, you know if something comes up then i'll write. honestly i just wanted to learn svelte so here i am. i would've liked another domain but couldn't settle on a name so i'll use github pages for now.
 
-You can write markdown here with all the usual formatting:
-
-- **Bold text**
-- *Italic text*
-- `inline code`
-
-```js
-const greeting = "Hello, World!";
-console.log(greeting);
-```
-
-## Why I Started This Blog
-
-I wanted a place to share my thoughts on programming, technology, and other things I find interesting. Writing helps me think through problems and document what I learn.
-
-## What's Next
-
-I plan to write about web development, systems programming, and open source projects I'm working on. Stay tuned for more posts!
+i'll just be adding cool stuff i think of to this website and make it my home i guess.
