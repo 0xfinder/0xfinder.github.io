@@ -6,7 +6,6 @@
 </script>
 
 <svelte:head>
-	<title>0xfinder</title>
 	<meta name="description" content="Personal website of 0xfinder" />
 </svelte:head>
 

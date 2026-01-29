@@ -8,6 +8,10 @@ onMount(() => {
 });
 </script>
 
+<svelte:head>
+	<title>0xfinder</title>
+</svelte:head>
+
 <div class="about" class:visible>
 	<div class="intro">
 		<p class="greeting">Hey, I'm</p>
