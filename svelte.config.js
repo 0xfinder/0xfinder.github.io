@@ -8,7 +8,24 @@ const config = {
 	preprocess: [
 		vitePreprocess(),
 		mdsvex({
-			extensions: ['.md']
+			extensions: ['.md'],
+			highlight: {
+				highlighter: async (code, lang) => {
+					const { codeToHtml } = await import('shiki');
+					try {
+						const html = await codeToHtml(code, { 
+							lang: lang || 'plaintext', 
+							themes: {
+								light: 'catppuccin-latte',
+								dark: 'catppuccin-mocha'
+							}
+						});
+						return html;
+					} catch {
+						return `<pre><code>${code}</code></pre>`;
+					}
+				}
+			}
 		})
 	],
 	kit: {

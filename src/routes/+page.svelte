@@ -30,6 +30,10 @@ onMount(() => {
 			<span class="tag">systems programming</span>, and 
 			<span class="tag">blockchains</span>.
 		</p>
+
+		<p>
+			in my free time (letting agents run), i enjoy watching anime and esports, and reading manga
+		</p>
 	</div>
 	
 	<div class="links-section">
