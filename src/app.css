@@ -55,20 +55,24 @@
   --accent-glow: #ffffff18;
   --border: #333;
   --link: #bbb;
+  --correct: #4ade80;
+  --wrong: #f87171;
 }
 
 [data-theme="light"] {
-  --bg-primary: #fff;
-  --bg-secondary: #f5f5f5;
-  --bg-tertiary: #eee;
-  --text-primary: #222;
+  --bg-primary: #fafafa;
+  --bg-secondary: #f1f1f0;
+  --bg-tertiary: #e7e7e5;
+  --text-primary: #1c1c1c;
   --text-secondary: #555;
   --text-muted: #888;
-  --accent: #222;
+  --accent: #1c1c1c;
   --accent-dim: #00000008;
   --accent-glow: #00000010;
-  --border: #e5e5e5;
+  --border: #ddd;
   --link: #555;
+  --correct: #15803d;
+  --wrong: #dc2626;
 }
 
 * {
