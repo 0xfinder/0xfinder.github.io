@@ -1,15 +1,17 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	
-	let theme = $state<'light' | 'dark'>('dark');
-	
+
+	function initialTheme(): 'light' | 'dark' {
+		if (!browser) return 'dark';
+		const stored = localStorage.getItem('theme') as 'light' | 'dark' | null;
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		return stored ?? (prefersDark ? 'dark' : 'light');
+	}
+
+	let theme = $state<'light' | 'dark'>(initialTheme());
+
 	$effect(() => {
-		if (browser) {
-			const stored = localStorage.getItem('theme') as 'light' | 'dark' | null;
-			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			theme = stored ?? (prefersDark ? 'dark' : 'light');
-			document.documentElement.dataset.theme = theme;
-		}
+		document.documentElement.dataset.theme = theme;
 	});
 	
 	function toggle() {
