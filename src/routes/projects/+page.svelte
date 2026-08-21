@@ -9,9 +9,10 @@
 	
 	const projects = [
 		{
-			name: 'Coming Soon',
-			description: 'Projects will be listed here.',
-			tags: ['WIP']
+			name: 'Albedo',
+			description: 'Personal Telegram bot for tracking wallets and Polymarket activity — because the Polymarket UI sucks.',
+			tags: ['Rust', 'Telegram Bot', 'Polymarket', 'SQLite'],
+			url: 'https://github.com/0xfinder/albedo'
 		}
 	];
 </script>
@@ -26,15 +27,20 @@
 	
 	<div class="grid">
 		{#each projects as project, i}
-			<div class="project-card" style="animation-delay: {i * 0.1}s">
-				<h3>{project.name}</h3>
+			<a href={project.url} target="_blank" rel="noopener" class="project-card" style="animation-delay: {i * 0.1}s">
+				<div class="card-header">
+					<h3>{project.name}</h3>
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M7 17L17 7M7 7h10v10"/>
+					</svg>
+				</div>
 				<p>{project.description}</p>
 				<div class="tags">
 					{#each project.tags as tag}
 						<span class="tag">{tag}</span>
 					{/each}
 				</div>
-			</div>
+			</a>
 		{/each}
 	</div>
 </div>
@@ -68,10 +74,13 @@
 	}
 	
 	.project-card {
+		display: block;
 		padding: 24px;
 		background: var(--bg-secondary);
 		border: 1px solid var(--border);
 		border-radius: 12px;
+		color: inherit;
+		text-decoration: none;
 		transition: all 0.2s ease;
 		animation: fadeUp 0.5s ease forwards;
 		opacity: 0;
@@ -96,6 +105,23 @@
 	.project-card h3 {
 		font-size: 1.2rem;
 		margin-bottom: 8px;
+	}
+
+	.card-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 8px;
+	}
+
+	.card-header svg {
+		color: var(--text-secondary);
+		transition: color 0.2s ease, transform 0.2s ease;
+	}
+
+	.project-card:hover .card-header svg {
+		color: var(--accent);
+		transform: translate(2px, -2px);
 	}
 	
 	.project-card p {
