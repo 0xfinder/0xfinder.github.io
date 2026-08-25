@@ -1,16 +1,22 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { kana, type Kana } from '$lib/data/kana';
+	import { kana, combos, type Kana, type Combo } from '$lib/data/kana';
 	import StrokeDiagram from '$lib/components/StrokeDiagram.svelte';
 
 	type Mode = 'browse' | 'quiz';
+	type Script = 'h' | 'k' | 'c';
+	type Entry = Kana | Combo;
 
 	let visible = $state(false);
 	let mode = $state<Mode>('browse');
-	let script = $state<'h' | 'k'>('h');
-	let selected = $state<Kana | null>(null);
+	let script = $state<Script>('h');
+	let selected = $state<Entry | null>(null);
 
-	const pool = $derived(kana.filter((k) => k.type === script));
+	function isCombo(entry: Entry): entry is Combo {
+		return 'glyphs' in entry;
+	}
+
+	const pool = $derived<Entry[]>(script === 'c' ? combos : kana.filter((k) => k.type === script));
 
 	// Gojūon chart: vowel columns × consonant rows, plus dakuten rows.
 	// Defined with hiragana; katakana is derived by codepoint shift (+0x60).
@@ -52,12 +58,47 @@
 		}));
 	}
 
-	const rows = $derived(chartRows(pool));
+	const rows = $derived(chartRows(pool as Kana[]));
+
+	// Yōon chart: contraction rows × ya/yu/yo columns.
+	const COMBO_CHART: { label: string; chars: [string, string, string] }[] = [
+		{ label: 'k', chars: ['きゃ', 'きゅ', 'きょ'] },
+		{ label: 's', chars: ['しゃ', 'しゅ', 'しょ'] },
+		{ label: 'ch', chars: ['ちゃ', 'ちゅ', 'ちょ'] },
+		{ label: 'n', chars: ['にゃ', 'にゅ', 'にょ'] },
+		{ label: 'h', chars: ['ひゃ', 'ひゅ', 'ひょ'] },
+		{ label: 'm', chars: ['みゃ', 'みゅ', 'みょ'] },
+		{ label: 'r', chars: ['りゃ', 'りゅ', 'りょ'] },
+		{ label: 'g', chars: ['ぎゃ', 'ぎゅ', 'ぎょ'] },
+		{ label: 'j', chars: ['じゃ', 'じゅ', 'じょ'] },
+		{ label: 'b', chars: ['びゃ', 'びゅ', 'びょ'] },
+		{ label: 'p', chars: ['ぴゃ', 'ぴゅ', 'ぴょ'] }
+	];
+
+	interface ComboRow {
+		label: string;
+		cells: (Combo | null)[];
+	}
+
+	function comboRows(type: 'h' | 'k'): ComboRow[] {
+		const map = new Map(combos.filter((c) => c.type === type).map((c) => [c.char, c]));
+		return COMBO_CHART.map((row) => ({
+			label: row.label,
+			cells: row.chars.map((c) => {
+				if (type === 'h') return map.get(c) ?? null;
+				const kat = [...c].map((ch) => String.fromCodePoint(ch.codePointAt(0)! + 0x60)).join('');
+				return map.get(kat) ?? null;
+			})
+		}));
+	}
+
+	const hiraganaComboRows = $derived(comboRows('h'));
+	const katakanaComboRows = $derived(comboRows('k'));
 
 	// Quiz state
-	let quizKana = $state<Kana | null>(null);
-	let choices = $state<Kana[]>([]);
-	let answered = $state<Kana | null>(null);
+	let quizKana = $state<Entry | null>(null);
+	let choices = $state<Entry[]>([]);
+	let answered = $state<Entry | null>(null);
 	let score = $state({ correct: 0, total: 0 });
 	let streak = $state(0);
 	let bestStreak = $state(0);
@@ -76,7 +117,7 @@
 		};
 	}
 
-	function pickRandom(exclude?: Kana): Kana {
+	function pickRandom(exclude?: Entry): Entry {
 		let next = pool[Math.floor(Math.random() * pool.length)];
 		while (pool.length > 1 && next === exclude) {
 			next = pool[Math.floor(Math.random() * pool.length)];
@@ -88,7 +129,7 @@
 		answered = null;
 		const answer = pickRandom(quizKana ?? undefined);
 		quizKana = answer;
-		const distractors: Kana[] = [];
+		const distractors: Entry[] = [];
 		while (distractors.length < 3) {
 			const cand = pickRandom(answer);
 			if (cand !== answer && !distractors.includes(cand) && cand.romaji !== answer.romaji) {
@@ -107,7 +148,7 @@
 		nextQuestion();
 	}
 
-	function answer(k: Kana) {
+	function answer(k: Entry) {
 		if (answered) return;
 		answered = k;
 		score.total++;
@@ -123,7 +164,7 @@
 		}
 	}
 
-	function setScript(s: 'h' | 'k') {
+	function setScript(s: Script) {
 		script = s;
 		selected = null;
 		if (mode === 'quiz') nextQuestion();
@@ -137,13 +178,14 @@
 <div class="kana" class:visible>
 	<div class="header">
 		<h1>Kana Practice</h1>
-		<p class="subtitle">Hiragana &amp; katakana with animated stroke order.</p>
+		<p class="subtitle">Hiragana, katakana &amp; yōon with animated stroke order.</p>
 	</div>
 
 	<div class="toolbar">
 		<div class="tabs">
 			<button class:active={script === 'h'} onclick={() => setScript('h')}>Hiragana</button>
 			<button class:active={script === 'k'} onclick={() => setScript('k')}>Katakana</button>
+			<button class:active={script === 'c'} onclick={() => setScript('c')}>Combined</button>
 		</div>
 		<button class="quiz-toggle" onclick={mode === 'quiz' ? () => (mode = 'browse') : startQuiz}>
 			{mode === 'quiz' ? 'Exit quiz' : 'Start quiz'}
@@ -155,7 +197,16 @@
 			{#if quizKana}
 				<div class="quiz-diagram">
 					{#key quizKana.char}
-						<StrokeDiagram strokes={quizKana.strokes} maxWidth="320px" />
+						{#if isCombo(quizKana)}
+							<StrokeDiagram
+								strokes={[]}
+								glyphs={quizKana.glyphs}
+								viewBox="-2 -2 148 118"
+								maxWidth="320px"
+							/>
+						{:else}
+							<StrokeDiagram strokes={quizKana.strokes} maxWidth="320px" />
+						{/if}
 					{/key}
 				</div>
 				<p class="prompt">
@@ -200,7 +251,15 @@
 					</svg>
 				</button>
 				{#key selected.char}
-					<StrokeDiagram strokes={selected.strokes} />
+					{#if isCombo(selected)}
+						<StrokeDiagram
+							strokes={[]}
+							glyphs={selected.glyphs}
+							viewBox="-2 -2 148 118"
+						/>
+					{:else}
+						<StrokeDiagram strokes={selected.strokes} />
+					{/if}
 				{/key}
 				<div class="detail-info">
 					<span class="big-char">{selected.char}</span>
@@ -210,28 +269,82 @@
 			</div>
 		{/if}
 
-		<div class="chart">
-			{#each rows as row, r}
-				<div class="row">
-					<span class="row-label">{row.label}</span>
-					{#each row.cells as k, i (k ? k.char : `empty-${r}-${i}`)}
-						{#if k}
-							<button
-								class="card"
-								style="animation-delay: {Math.min((r * 5 + i) * 0.02, 0.6)}s"
-								class:selected={selected?.char === k.char}
-								onclick={() => (selected = k)}
-							>
-								<span class="char">{k.char}</span>
-								<span class="romaji">{k.romaji}</span>
-							</button>
-						{:else}
-							<span class="empty"></span>
-						{/if}
+		{#if script === 'c'}
+			<section class="combo-section">
+				<h3 class="section-title">Hiragana</h3>
+				<div class="chart">
+					{#each hiraganaComboRows as row, r}
+						<div class="row combo">
+							<span class="row-label">{row.label}</span>
+							{#each row.cells as k, i (k ? k.char : `h-empty-${r}-${i}`)}
+								{#if k}
+									<button
+										class="card"
+										style="animation-delay: {Math.min((r * 3 + i) * 0.02, 0.6)}s"
+										class:selected={selected?.char === k.char}
+										onclick={() => (selected = k)}
+									>
+										<span class="char">{k.char}</span>
+										<span class="romaji">{k.romaji}</span>
+									</button>
+								{:else}
+									<span class="empty"></span>
+								{/if}
+							{/each}
+						</div>
 					{/each}
 				</div>
-			{/each}
-		</div>
+			</section>
+
+			<section class="combo-section">
+				<h3 class="section-title">Katakana</h3>
+				<div class="chart">
+					{#each katakanaComboRows as row, r}
+						<div class="row combo">
+							<span class="row-label">{row.label}</span>
+							{#each row.cells as k, i (k ? k.char : `k-empty-${r}-${i}`)}
+								{#if k}
+									<button
+										class="card"
+										style="animation-delay: {Math.min((r * 3 + i) * 0.02 + 0.1, 0.7)}s"
+										class:selected={selected?.char === k.char}
+										onclick={() => (selected = k)}
+									>
+										<span class="char">{k.char}</span>
+										<span class="romaji">{k.romaji}</span>
+									</button>
+								{:else}
+									<span class="empty"></span>
+								{/if}
+							{/each}
+						</div>
+					{/each}
+				</div>
+			</section>
+		{:else}
+			<div class="chart">
+				{#each rows as row, r}
+					<div class="row">
+						<span class="row-label">{row.label}</span>
+						{#each row.cells as k, i (k ? k.char : `empty-${r}-${i}`)}
+							{#if k}
+								<button
+									class="card"
+									style="animation-delay: {Math.min((r * 5 + i) * 0.02, 0.6)}s"
+									class:selected={selected?.char === k.char}
+									onclick={() => (selected = k)}
+								>
+									<span class="char">{k.char}</span>
+									<span class="romaji">{k.romaji}</span>
+								</button>
+							{:else}
+								<span class="empty"></span>
+							{/if}
+						{/each}
+					</div>
+				{/each}
+			</div>
+		{/if}
 	{/if}
 
 	<footer class="attribution">
@@ -377,6 +490,27 @@
 		gap: 8px;
 	}
 
+	.row.combo {
+		grid-template-columns: repeat(3, minmax(0, 220px));
+	}
+
+	.combo-section {
+		margin-bottom: 24px;
+	}
+
+	.combo-section + .combo-section {
+		margin-top: 8px;
+	}
+
+	.section-title {
+		font-size: 0.85rem;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--text-muted);
+		margin-bottom: 12px;
+	}
+
 	.row-label {
 		position: absolute;
 		right: calc(100% + 8px);
@@ -430,6 +564,10 @@
 		font-size: 1.6rem;
 		color: var(--text-primary);
 		line-height: 1;
+	}
+
+	.row.combo .char {
+		font-size: 1.4rem;
 	}
 
 	@media (max-width: 480px) {

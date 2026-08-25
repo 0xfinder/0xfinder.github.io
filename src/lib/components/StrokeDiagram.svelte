@@ -1,7 +1,17 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 
-	let { strokes, maxWidth = '220px' }: { strokes: string[]; maxWidth?: string } = $props();
+	let {
+		strokes,
+		glyphs = null,
+		viewBox = '-2 -2 113 113',
+		maxWidth = '220px'
+	}: {
+		strokes: string[];
+		glyphs?: { strokes: string[]; transform?: string }[] | null;
+		viewBox?: string;
+		maxWidth?: string;
+	} = $props();
 
 	let svgEl: SVGSVGElement | null = $state(null);
 	let lens = $state<number[]>([]);
@@ -17,12 +27,25 @@
 	const GAP_MS = 120;
 	const LOOP_PAUSE_MS = 800;
 
-	const measured = $derived(lens.length === strokes.length && strokes.length > 0);
+	const groups = $derived(glyphs ?? [{ strokes }]);
+	const totalStrokes = $derived(groups.reduce((n, g) => n + g.strokes.length, 0));
+	const paths = $derived.by(() => {
+		let n = 0;
+		return groups.flatMap((g, gi) =>
+			g.strokes.map((d, i) => ({
+				d,
+				transform: g.transform,
+				key: `${playToken}-${gi}-${i}`,
+				idx: n++
+			}))
+		);
+	});
+	const measured = $derived(lens.length === totalStrokes && totalStrokes > 0);
 
 	const schedule = $derived.by(() => {
 		const speed = speeds[speedIdx];
 		let t = 200 / speed;
-		return strokes.map((_, i) => {
+		return paths.map((_, i) => {
 			const dur = Math.max(((lens[i] ?? 0) * BASE_MS_PER_UNIT) / speed, 150);
 			const delay = t;
 			t += dur * 0.6 + GAP_MS / speed;
@@ -73,21 +96,21 @@
 </script>
 
 <div class="diagram">
-	<svg bind:this={svgEl} viewBox="-2 -2 113 113" aria-label="Stroke order diagram" style:max-width={maxWidth}>
-		{#each strokes as d (d)}
-			<path class="ghost" {d} />
-		{/each}
-		{#each strokes as d, i (playToken + '-' + i)}
-			<path
-				class="stroke"
-				class:ready={measured}
-				{d}
-				style:stroke-dasharray={`${lens[i] ?? 1} ${lens[i] ?? 1}`}
-				style:stroke-dashoffset={drawn ? 0 : (lens[i] ?? 1)}
-				style:transition={drawn
-					? `stroke-dashoffset ${schedule[i].dur}ms linear ${schedule[i].delay}ms`
-					: 'none'}
-			/>
+	<svg bind:this={svgEl} {viewBox} aria-label="Stroke order diagram" style:max-width={maxWidth}>
+		{#each paths as p (p.key)}
+			<g transform={p.transform}>
+				<path class="ghost" d={p.d} />
+				<path
+					class="stroke"
+					class:ready={measured}
+					d={p.d}
+					style:stroke-dasharray={`${lens[p.idx] ?? 1} ${lens[p.idx] ?? 1}`}
+					style:stroke-dashoffset={drawn ? 0 : (lens[p.idx] ?? 1)}
+					style:transition={drawn
+						? `stroke-dashoffset ${schedule[p.idx].dur}ms linear ${schedule[p.idx].delay}ms`
+						: 'none'}
+				/>
+			</g>
 		{/each}
 	</svg>
 

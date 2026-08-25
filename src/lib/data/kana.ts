@@ -166,3 +166,63 @@ export const kana: Kana[] = [
 	{ char: 'ヹ', romaji: 've', type: 'k', strokes: ['M30.87,28.32c2.62,2.18,5.86,2.38,8.75,1.98c12.12-1.68,19.01-2.14,31.75-3.93c3.73-0.52,6.93,2.16,3,6c-5.75,5.63-14.63,13.63-16.63,15.25','M52.83,47.12c1.08,1.48,1.3,2.96,1.21,4.71c-0.54,11.29-0.67,15.08-0.81,21.54','M16,76.23c2.54,1.09,5.3,1.98,8.75,1.55c21.5-2.66,36.66-3.44,56.57-3.59c4.83-0.04,8.88,0.62,12.18,2.02','M81.62,16.88c2.61,1.93,5.7,5.93,7.36,9.37','M87.68,11.75c2.82,1.78,6.15,5.48,7.94,8.66'], strokeCount: 5 },
 	{ char: 'ヺ', romaji: 'vo', type: 'k', strokes: ['M30.24,25.14c2.38,1.7,5.11,2.13,9.25,1.7c12.32-1.29,21.94-2.6,30.48-3.64c2.81-0.34,5.51-0.65,8.14-0.93','M29,46.69c2.25,1.44,4.44,1.9,8.05,1.4c8.19-1.15,19.93-2.64,28.56-3.79c2.38-0.31,4.65-0.62,6.75-0.92','M78,22.88c0.88,2,0.62,4.64,0.12,7c-4.88,22.5-23.5,47.12-44.12,60.74','M83.62,12.88c2.61,1.93,5.7,5.93,7.36,9.37','M89.68,7.75c2.82,1.78,6.15,5.48,7.94,8.66'], strokeCount: 5 }
 ];
+
+// Yōon (contractions): base kana + small ya/yu/yo.
+// Small kana are scaled-down copies of the full-size glyphs, so stroke data
+// is reused from the base entries rather than stored separately.
+export interface Combo {
+	char: string;
+	romaji: string;
+	type: KanaType;
+	glyphs: { strokes: string[]; transform?: string }[];
+	strokeCount: number;
+}
+
+const SMALL_SCALE = 0.55;
+
+const SMALL_TO_FULL: Record<string, string> = { ゃ: 'や', ゅ: 'ゆ', ょ: 'よ' };
+
+// [base, small, romaji] in hiragana; katakana derived by codepoint shift (+0x60).
+const YOON: [string, string, string][] = [
+	['き', 'ゃ', 'kya'], ['き', 'ゅ', 'kyu'], ['き', 'ょ', 'kyo'],
+	['し', 'ゃ', 'sha'], ['し', 'ゅ', 'shu'], ['し', 'ょ', 'sho'],
+	['ち', 'ゃ', 'cha'], ['ち', 'ゅ', 'chu'], ['ち', 'ょ', 'cho'],
+	['に', 'ゃ', 'nya'], ['に', 'ゅ', 'nyu'], ['に', 'ょ', 'nyo'],
+	['ひ', 'ゃ', 'hya'], ['ひ', 'ゅ', 'hyu'], ['ひ', 'ょ', 'hyo'],
+	['み', 'ゃ', 'mya'], ['み', 'ゅ', 'myu'], ['み', 'ょ', 'myo'],
+	['り', 'ゃ', 'rya'], ['り', 'ゅ', 'ryu'], ['り', 'ょ', 'ryo'],
+	['ぎ', 'ゃ', 'gya'], ['ぎ', 'ゅ', 'gyu'], ['ぎ', 'ょ', 'gyo'],
+	['じ', 'ゃ', 'ja'], ['じ', 'ゅ', 'ju'], ['じ', 'ょ', 'jo'],
+	['び', 'ゃ', 'bya'], ['び', 'ゅ', 'byu'], ['び', 'ょ', 'byo'],
+	['ぴ', 'ゃ', 'pya'], ['ぴ', 'ゅ', 'pyu'], ['ぴ', 'ょ', 'pyo']
+];
+
+function shiftChar(c: string): string {
+	return String.fromCodePoint(c.codePointAt(0)! + 0x60);
+}
+
+function makeCombos(type: KanaType): Combo[] {
+	const s = (c: string) => (type === 'h' ? c : shiftChar(c));
+	return YOON.flatMap(([base, small, romaji]) => {
+		const baseGlyph = kana.find((k) => k.char === s(base));
+		const smallGlyph = kana.find((k) => k.char === s(SMALL_TO_FULL[small]));
+		if (!baseGlyph || !smallGlyph) return [];
+		return [
+			{
+				char: s(base) + s(small),
+				romaji,
+				type,
+				glyphs: [
+					{ strokes: baseGlyph.strokes },
+					{
+						strokes: smallGlyph.strokes,
+						transform: `translate(88, 24) scale(${SMALL_SCALE})`
+					}
+				],
+				strokeCount: baseGlyph.strokeCount + smallGlyph.strokeCount
+			}
+		];
+	});
+}
+
+export const combos: Combo[] = [...makeCombos('h'), ...makeCombos('k')];
