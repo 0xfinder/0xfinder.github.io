@@ -89,10 +89,6 @@ onMount(() => {
 		align-items: center;
 	}
 	
-	.accent {
-		color: var(--accent);
-	}
-	
 	.cursor {
 		width: 4px;
 		height: 0.9em;

@@ -131,7 +131,7 @@ function scrollToHeading(id: string) {
 	}
 
 	.back:hover {
-		color: var(--text-primary);
+		color: var(--accent);
 	}
 
 	h1 {
@@ -221,7 +221,7 @@ function scrollToHeading(id: string) {
 	}
 
 	.toc-link.active {
-		color: var(--text-primary);
+		color: var(--accent);
 	}
 
 	/* Content styles */
@@ -276,17 +276,18 @@ function scrollToHeading(id: string) {
 	}
 
 	.content :global(a) {
-		color: var(--text-primary);
+		color: var(--accent);
 		text-decoration: underline;
 		text-underline-offset: 3px;
+		text-decoration-color: var(--accent-glow);
 	}
 
 	.content :global(a:hover) {
-		color: var(--text-secondary);
+		text-decoration-color: var(--accent);
 	}
 
 	.content :global(blockquote) {
-		border-left: 3px solid var(--border);
+		border-left: 3px solid var(--accent-dim);
 		padding-left: 16px;
 		margin: 24px 0;
 		color: var(--text-muted);

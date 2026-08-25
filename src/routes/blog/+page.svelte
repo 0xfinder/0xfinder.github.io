@@ -104,13 +104,14 @@
 	}
 
 	.post-card:hover {
-		border-color: var(--text-secondary);
+		border-color: var(--accent);
+		box-shadow: 0 0 24px var(--accent-glow);
 		transform: translateX(4px);
 	}
 
 	.date {
 		font-size: 0.85rem;
-		color: var(--text-muted);
+		color: var(--accent);
 		font-family: 'Geist Mono', monospace;
 	}
 

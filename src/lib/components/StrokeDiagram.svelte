@@ -137,9 +137,9 @@
 	}
 
 	.stroke {
-		stroke: var(--accent);
+		stroke: var(--kana-stroke);
 		stroke-width: 3;
-		filter: drop-shadow(0 0 4px var(--accent-glow));
+		filter: drop-shadow(0 0 4px var(--kana-glow));
 		opacity: 0;
 	}
 
