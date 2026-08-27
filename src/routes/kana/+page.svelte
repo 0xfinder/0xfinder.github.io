@@ -2,6 +2,14 @@
 	import { onMount } from 'svelte';
 	import { kana, combos, type Kana, type Combo } from '$lib/data/kana';
 	import StrokeDiagram from '$lib/components/StrokeDiagram.svelte';
+	import {
+		loadStats,
+		saveStats,
+		recordAnswer,
+		selectionWeight,
+		clearStats,
+		type KanaStatsMap
+	} from '$lib/kana-stats';
 
 	type Mode = 'browse' | 'quiz';
 	type Script = 'h' | 'k' | 'c';
@@ -102,9 +110,11 @@
 	let score = $state({ correct: 0, total: 0 });
 	let streak = $state(0);
 	let bestStreak = $state(0);
+	let stats = $state<KanaStatsMap>({});
 
 	onMount(() => {
 		visible = true;
+		stats = loadStats();
 	});
 
 	function fadeCollapse(node: HTMLElement, { duration = 250 } = {}) {
@@ -125,9 +135,23 @@
 		return next;
 	}
 
+	// Weighted-random pick: kana the user gets wrong are far more likely to
+	// appear, while mastered ones fade into the background (see selectionWeight).
+	function pickWeighted(excludeChar?: string): Entry {
+		const candidates = pool.filter((e) => e.char !== excludeChar || pool.length === 1);
+		const weights = candidates.map((e) => selectionWeight(stats[e.char]));
+		const total = weights.reduce((a, b) => a + b, 0);
+		let r = Math.random() * total;
+		for (let i = 0; i < candidates.length; i++) {
+			r -= weights[i];
+			if (r <= 0) return candidates[i];
+		}
+		return candidates[candidates.length - 1];
+	}
+
 	function nextQuestion() {
 		answered = null;
-		const answer = pickRandom(quizKana ?? undefined);
+		const answer = pickWeighted(quizKana?.char);
 		quizKana = answer;
 		const distractors: Entry[] = [];
 		while (distractors.length < 3) {
@@ -149,10 +173,11 @@
 	}
 
 	function answer(k: Entry) {
-		if (answered) return;
+		if (answered || !quizKana) return;
 		answered = k;
 		score.total++;
-		if (k.char === quizKana?.char) {
+		const correct = k.char === quizKana.char;
+		if (correct) {
 			score.correct++;
 			streak++;
 			bestStreak = Math.max(bestStreak, streak);
@@ -162,6 +187,14 @@
 		} else {
 			streak = 0;
 		}
+		stats = recordAnswer(stats, quizKana.char, correct);
+		saveStats(stats);
+	}
+
+	function resetProgress() {
+		if (!confirm('Clear all saved quiz progress?')) return;
+		stats = {};
+		clearStats();
 	}
 
 	function setScript(s: Script) {
@@ -240,6 +273,8 @@
 					<span>{score.correct}/{score.total}</span>
 					<span>streak {streak}{bestStreak > 0 ? ` · best ${bestStreak}` : ''}</span>
 				</div>
+				<p class="score-hint">Kana you miss appear more often · progress is saved in this browser</p>
+				<button class="reset" onclick={resetProgress}>Reset progress</button>
 			{/if}
 		</div>
 	{:else}
@@ -671,6 +706,28 @@
 		gap: 16px;
 		color: var(--text-secondary);
 		font-size: 0.9rem;
+	}
+
+	.score-hint {
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		text-align: center;
+	}
+
+	.reset {
+		padding: 6px 14px;
+		background: transparent;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		color: var(--text-muted);
+		font-size: 0.8rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.reset:hover {
+		color: var(--wrong);
+		border-color: var(--wrong);
 	}
 
 	.attribution {
