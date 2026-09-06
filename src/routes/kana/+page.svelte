@@ -43,7 +43,7 @@
 		{ label: 'm', kana: ['ま', 'み', 'む', 'め', 'も'] },
 		{ label: 'y', kana: ['や', null, 'ゆ', null, 'よ'] },
 		{ label: 'r', kana: ['ら', 'り', 'る', 'れ', 'ろ'] },
-		{ label: 'w', kana: ['わ', 'ゐ', 'ゑ', 'を', null] },
+		{ label: 'w', kana: ['わ', null, null, null, 'を'] },
 		{ label: '', kana: ['ん', null, null, null, null] },
 		{ label: 'g', kana: ['が', 'ぎ', 'ぐ', 'げ', 'ご'] },
 		{ label: 'z', kana: ['ざ', 'じ', 'ず', 'ぜ', 'ぞ'] },
