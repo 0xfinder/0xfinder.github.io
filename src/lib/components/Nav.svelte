@@ -6,8 +6,13 @@
 		{ href: '/', label: 'About' },
 		{ href: '/projects', label: 'Projects' },
 		{ href: '/blog', label: 'Blog' },
-		{ href: '/kana', label: 'Kana' }
+		{ href: '/kana', label: 'Kana' },
+		{ href: '/esports', label: 'Esports' }
 	];
+
+	function isActive(href: string): boolean {
+		return page.url.pathname === href || page.url.pathname.startsWith(`${href}/`);
+	}
 </script>
 
 <nav>
@@ -21,7 +26,7 @@
 					<a 
 						href={link.href} 
 						class="nav-link"
-						class:active={page.url.pathname === link.href}
+						class:active={isActive(link.href)}
 					>
 						{link.label}
 					</a>

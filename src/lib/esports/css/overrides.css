@@ -1,0 +1,102 @@
+/*
+ * Hand-written adaptations layered on top of the generated port.
+ * Keep additions here rather than editing css/esports.css, which is regenerated.
+ */
+
+/* Upstream toggled item tooltips with jQuery .show()/.hide(). */
+.esports .itemDescription.shown {
+  display: block;
+}
+
+/* Toasts replace react-toastify; upstream anchored blue team left, red team right. */
+.esports .toast-host {
+  position: fixed;
+  top: 5rem;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: min(22rem, 80vw);
+  pointer-events: none;
+}
+
+.esports .toast-host.left {
+  left: 1rem;
+}
+
+.esports .toast-host.right {
+  right: 1rem;
+}
+
+.esports .toast-host .toast-watcher {
+  pointer-events: auto;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.esports .toast-host .toast-watcher h4 {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.esports .toast-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Upstream collapsed champion stat rows with jQuery slideToggle on this span. */
+.esports .champion-stats-row span.expanded {
+  display: block;
+}
+
+/* Twitch's JS builds its player in a container rather than an iframe we render. */
+.esports #video-player.added {
+  margin-top: 10px;
+  width: 100%;
+  padding-top: 56.25%;
+  position: relative;
+}
+
+.esports #video-player.added.chatEnabled {
+  min-height: 600px;
+}
+
+/* The player element only renders once a stream is chosen, so it is always "added". */
+.esports #video-player.added > iframe {
+  display: block;
+}
+
+.esports #video-player > #twitch-embed {
+  position: absolute;
+  inset: 0;
+}
+
+.esports #video-player > #twitch-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/*
+ * Team logos from the esports API are white-on-transparent (upstream filenames
+ * include "*-White.png" and "*-on-dark.png"), so the plate behind the <img> has
+ * to stay dark in light theme or the logos vanish. The TBD fallback is an <svg>
+ * using currentColor, so it keeps the theme background and stays visible.
+ */
+[data-theme="light"] .esports img.live-game-card-team-image {
+  background: #2a2e35;
+}
+
+/*
+ * Upstream used <h4> for team names inside a flex <h1> wrapper, which is invalid
+ * nesting. Same weight and size, valid markup.
+ */
+.esports .live-game-card-team .team-name {
+  font-weight: bold;
+}
